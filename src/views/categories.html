@@ -3,14 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <title>Gerer les catégories</title>
+    <link rel="stylesheet" href="../assets/css/categories.css"/>
 </head>
 <body>
-<p>
-    <button id="button-lister" class="button">Lister les fournisseurs</button>
-    <button id="button-ajouter" class="button">Ajouter un fournisseur</button>
-    <button id="button-modifier" class="button">Modifier un fournisseur</button>
-    <button id="button-supprimer" class="button">Supprimer un fournisseur</button>
-    <button id="button-retour" class="button">Retour</button>
-</p>
+<header>
+    <h1>Gestion des Catégories</h1>
+</header>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-logo">
+            <span class="logo-icon">📑</span>
+            TechNatura - Catégories
+        </div>
+        <div class="navbar-buttons">
+            <button id="button-ajouter" class="btn btn-primary">
+                <span>➕</span>
+                Ajouter une catégorie
+            </button>
+            <button id="button-retour" class="btn btn-secondary">
+                <span>⬅️</span>
+                Retour
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="content">
+    <div class="categories-container">
+        <div class="categories-header">
+            <h2 class="categories-title">Liste des catégories</h2>
+            <span class="categories-count">5 catégories</span>
+        </div>
+        <div class="categories-table-container">
+            <table class="categories-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Description</th>
+                    <th>Nombre de produits</th>
+                    <th>Date de création</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-row="1">
+                    <td>1</td>
+                    <td class="category-name">Informatique</td>
+                    <td class="category-description">Ordinateurs, tablettes et accessoires informatiques</td>
+                    <td><span class="badge badge-primary">48</span></td>
+                    <td>15/03/2023</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn edit-btn" data-id="1">
+                                <span>✏️</span> Modifier
+                            </button>
+                            <button class="action-btn delete-btn" data-id="1">
+                                <span>🗑️</span> Supprimer
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr data-row="2">
+                    <td>2</td>
+                    <td class="category-name">Téléphonie</td>
+                    <td class="category-description">Smartphones, téléphones fixes et accessoires</td>
+                    <td><span class="badge badge-primary">36</span></td>
+                    <td>15/03/2023</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn edit-btn" data-id="2">
+                                <span>✏️</span> Modifier
+                            </button>
+                            <button class="action-btn delete-btn" data-id="2">
+                                <span>🗑️</span> Supprimer
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr data-row="3">
+                    <td>3</td>
+                    <td class="category-name">Audio</td>
+                    <td class="category-description">Casques, enceintes et matériel audio</td>
+                    <td><span class="badge badge-primary">24</span></td>
+                    <td>20/04/2023</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn edit-btn" data-id="3">
+                                <span>✏️</span> Modifier
+                            </button>
+                            <button class="action-btn delete-btn" data-id="3">
+                                <span>🗑️</span> Supprimer
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr data-row="4">
+                    <td>4</td>
+                    <td class="category-name">Périphériques</td>
+                    <td class="category-description">Imprimantes, scanners et périphériques divers</td>
+                    <td><span class="badge badge-primary">15</span></td>
+                    <td>05/05/2023</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn edit-btn" data-id="4">
+                                <span>✏️</span> Modifier
+                            </button>
+                            <button class="action-btn delete-btn" data-id="4">
+                                <span>🗑️</span> Supprimer
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr data-row="5">
+                    <td>5</td>
+                    <td class="category-name">Accessoires</td>
+                    <td class="category-description">Câbles, adaptateurs et accessoires divers</td>
+                    <td><span class="badge badge-primary">29</span></td>
+                    <td>12/06/2023</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn edit-btn" data-id="5">
+                                <span>✏️</span> Modifier
+                            </button>
+                            <button class="action-btn delete-btn" data-id="5">
+                                <span>🗑️</span> Supprimer
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modals/Pop-ups -->
+<!-- Ajouter une catégorie -->
+<div id="modal-ajouter" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Ajouter une Catégorie</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="add-category-form">
+                <div class="form-group">
+                    <label for="nom">Nom de la catégorie</label>
+                    <input type="text" id="nom" name="nom" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="3"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn btn-cancel close-modal-btn">Annuler</button>
+            <button class="modal-btn btn-confirm" id="save-category">Enregistrer</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modifier une catégorie -->
+<div id="modal-modifier" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Modifier une Catégorie</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="edit-category-form">
+                <input type="hidden" id="edit-id" name="edit-id">
+                <div class="form-group">
+                    <label for="edit-nom">Nom de la catégorie</label>
+                    <input type="text" id="edit-nom" name="edit-nom" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-description">Description</label>
+                    <textarea id="edit-description" name="edit-description" rows="3"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn btn-cancel close-modal-btn">Annuler</button>
+            <button class="modal-btn btn-confirm" id="update-category">Mettre à jour</button>
+        </div>
+    </div>
+</div>
+
+<!-- Supprimer une catégorie -->
+<div id="modal-supprimer" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Supprimer une Catégorie</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>Êtes-vous sûr de vouloir supprimer la catégorie <strong id="delete-category-name">Nom de la catégorie</strong> ?</p>
+            <p style="margin-top: 1rem; color: #e74c3c;">
+                <strong>Attention :</strong> Cette action est irréversible. Tous les produits associés à cette catégorie devront être réaffectés.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn btn-cancel close-modal-btn">Annuler</button>
+            <button class="modal-btn btn-danger" id="confirm-delete">Supprimer</button>
+        </div>
+    </div>
+</div>
+
+<script src="../assets/js/categories.js"></script>
 </body>
 </html>
