@@ -2,15 +2,678 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Gerer les produits</title>
+    <title>Gestion des Produits - TechNatura</title>
+    <link rel="stylesheet" href="../assets/css/product.css">
 </head>
 <body>
-<p>
-    <button id="button-lister" class="button">Lister les produits</button>
-    <button id="button-ajouter" class="button">Ajouter un produit</button>
-    <button id="button-modifier" class="button">Modifier un produit</button>
-    <button id="button-supprimer" class="button">Supprimer un produit</button>
-    <button id="button-retour" class="button">Retour</button>
-</p>
+<header>
+    <h1>Gestion des Produits</h1>
+</header>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-logo">
+            <span class="logo-icon">📦</span>
+            TechNatura - Produits
+        </div>
+        <div class="navbar-buttons">
+            <button id="button-ajouter" class="btn btn-primary">
+                <span>➕</span>
+                Ajouter un produit
+            </button>
+            <button id="button-retour" class="btn btn-secondary">
+                <span>⬅️</span>
+                Retour
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="content">
+    <div class="products-container">
+        <div class="products-header">
+            <h2 class="products-title">Liste des produits</h2>
+            <span class="products-count">12 produits</span>
+        </div>
+        <div class="products-table-container">
+            <table class="products-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Nom</th>
+                    <th>Quantité</th>
+                    <th>Prix</th>
+                    <th>Catégorie</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-row="1">
+                    <td>1</td>
+                    <td>
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/150x100?text=Ordinateur" alt="Ordinateur portable HP">
+                        </div>
+                    </td>
+                    <td class="product-name">Ordinateur portable HP</td>
+                    <td>
+                        <span class="status-badge status-in-stock">25</span>
+                    </td>
+                    <td class="product-price">899.99 €</td>
+                    <td class="product-category">Informatique</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn edit-btn" data-id="1">
+                                <span>✏️</span> Modifier
+                            </button>
+                            <button class="action-btn delete-btn" data-id="1">
+                                <span>🗑️</span> Supprimer
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr data-row="2">
+                    <td>2</td>
+                    <td>
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/150x100?text=Smartphone" alt="Smartphone Samsung Galaxy">
+                        </div>
+                    </td>
+                    <td class="product-name">Smartphone Samsung Galaxy</td>
+                    <td>
+                        <span class="status-badge status-in-stock">42</span>
+                    </td>
+                    <td class="product-price">699.99 €</td>
+                    <td class="product-category">Téléphonie</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn edit-btn" data-id="2">
+                                <span>✏️</span> Modifier
+                            </button>
+                            <button class="action-btn delete-btn" data-id="2">
+                                <span>🗑️</span> Supprimer
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr data-row="3">
+                    <td>3</td>
+                    <td>
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/150x100?text=Tablette" alt="Tablette Apple iPad">
+                        </div>
+                    </td>
+                    <td class="product-name">Tablette Apple iPad</td>
+                    <td>
+                        <span class="status-badge status-low-stock">8</span>
+                    </td>
+                    <td class="product-price">549.99 €</td>
+                    <td class="product-category">Informatique</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn edit-btn" data-id="3">
+                                <span>✏️</span> Modifier
+                            </button>
+                            <button class="action-btn delete-btn" data-id="3">
+                                <span>🗑️</span> Supprimer
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr data-row="4">
+                    <td>4</td>
+                    <td>
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/150x100?text=Casque" alt="Casque Audio Sony">
+                        </div>
+                    </td>
+                    <td class="product-name">Casque Audio Sony</td>
+                    <td>
+                        <span class="status-badge status-in-stock">15</span>
+                    </td>
+                    <td class="product-price">249.99 €</td>
+                    <td class="product-category">Audio</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn edit-btn" data-id="4">
+                                <span>✏️</span> Modifier
+                            </button>
+                            <button class="action-btn delete-btn" data-id="4">
+                                <span>🗑️</span> Supprimer
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr data-row="5">
+                    <td>5</td>
+                    <td>
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/150x100?text=Imprimante" alt="Imprimante Laser">
+                        </div>
+                    </td>
+                    <td class="product-name">Imprimante Laser</td>
+                    <td>
+                        <span class="status-badge status-out-of-stock">0</span>
+                    </td>
+                    <td class="product-price">199.99 €</td>
+                    <td class="product-category">Périphériques</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn edit-btn" data-id="5">
+                                <span>✏️</span> Modifier
+                            </button>
+                            <button class="action-btn delete-btn" data-id="5">
+                                <span>🗑️</span> Supprimer
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modals/Pop-ups -->
+<!-- Ajouter un produit -->
+<div id="modal-ajouter" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Ajouter un Produit</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="add-product-form">
+                <div class="form-group">
+                    <label for="nom">Nom du produit</label>
+                    <input type="text" id="nom" name="nom" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="prix">Prix (€)</label>
+                    <input type="number" id="prix" name="prix" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="stock">Quantité en stock</label>
+                    <input type="number" id="stock" name="stock" required>
+                </div>
+                <div class="form-group">
+                    <label for="categorie">Catégorie</label>
+                    <select id="categorie" name="categorie" required>
+                        <option value="">Sélectionner une catégorie</option>
+                        <option value="Informatique">Informatique</option>
+                        <option value="Téléphonie">Téléphonie</option>
+                        <option value="Audio">Audio</option>
+                        <option value="Périphériques">Périphériques</option>
+                        <option value="Accessoires">Accessoires</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="image">Image du produit</label>
+                    <div class="image-upload-container">
+                        <div class="image-preview" id="image-preview-add">
+                            <img src="placeholder.jpg" alt="Aperçu de l'image" id="preview-add-img">
+                            <div class="upload-placeholder" id="upload-placeholder-add">
+                                <span class="upload-icon">📸</span>
+                                <span>Cliquez ou déposez une image</span>
+                            </div>
+                        </div>
+                        <input type="file" id="image" name="image" accept="image/*" class="image-input">
+                        <button type="button" class="btn btn-secondary btn-sm remove-image" id="remove-image-add" style="display: none;">Supprimer l'image</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn btn-cancel close-modal-btn">Annuler</button>
+            <button class="modal-btn btn-confirm" id="save-product">Enregistrer</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modifier un produit -->
+<div id="modal-modifier" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Modifier un Produit</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="edit-product-form">
+                <input type="hidden" id="edit-id" name="edit-id">
+                <div class="form-group">
+                    <label for="edit-nom">Nom du produit</label>
+                    <input type="text" id="edit-nom" name="edit-nom" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-description">Description</label>
+                    <textarea id="edit-description" name="edit-description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-prix">Prix (€)</label>
+                    <input type="number" id="edit-prix" name="edit-prix" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-stock">Quantité en stock</label>
+                    <input type="number" id="edit-stock" name="edit-stock" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-categorie">Catégorie</label>
+                    <select id="edit-categorie" name="edit-categorie" required>
+                        <option value="">Sélectionner une catégorie</option>
+                        <option value="Informatique">Informatique</option>
+                        <option value="Téléphonie">Téléphonie</option>
+                        <option value="Audio">Audio</option>
+                        <option value="Périphériques">Périphériques</option>
+                        <option value="Accessoires">Accessoires</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-image">Image du produit</label>
+                    <div class="image-upload-container">
+                        <div class="image-preview" id="image-preview-edit">
+                            <img src="placeholder.jpg" alt="Aperçu de l'image" id="preview-edit-img">
+                            <div class="upload-placeholder" id="upload-placeholder-edit">
+                                <span class="upload-icon">📸</span>
+                                <span>Cliquez ou déposez une image</span>
+                            </div>
+                        </div>
+                        <input type="file" id="edit-image" name="edit-image" accept="image/*" class="image-input">
+                        <button type="button" class="btn btn-secondary btn-sm remove-image" id="remove-image-edit" style="display: none;">Supprimer l'image</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn btn-cancel close-modal-btn">Annuler</button>
+            <button class="modal-btn btn-confirm" id="update-product">Mettre à jour</button>
+        </div>
+    </div>
+</div>
+
+<!-- Supprimer un produit -->
+<div id="modal-supprimer" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Supprimer un Produit</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>Êtes-vous sûr de vouloir supprimer le produit <strong id="delete-product-name">Nom du produit</strong> ?</p>
+            <p style="margin-top: 1rem; color: #e74c3c;">
+                <strong>Attention :</strong> Cette action est irréversible. Le produit sera définitivement supprimé.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn btn-cancel close-modal-btn">Annuler</button>
+            <button class="modal-btn btn-danger" id="confirm-delete">Supprimer</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Définir les variables manquantes
+        const modals = {
+            ajouter: document.getElementById('modal-ajouter'),
+            modifier: document.getElementById('modal-modifier'),
+            supprimer: document.getElementById('modal-supprimer')
+        };
+
+        const buttons = {
+            edit: document.querySelectorAll('.edit-btn'),
+            delete: document.querySelectorAll('.delete-btn')
+        };
+
+        // Fonction pour ouvrir le modal d'ajout
+        function openAddModal() {
+            // Réinitialiser le formulaire
+            resetAddForm();
+
+            // Afficher le modal
+            const modalAjouter = document.getElementById('modal-ajouter');
+            if (modalAjouter) {
+                modalAjouter.style.display = 'block';
+            }
+        }
+
+        // Utiliser la délégation d'événements pour les boutons principaux
+        document.addEventListener('click', function(event) {
+            // Bouton Ajouter
+            if (event.target.id === 'button-ajouter' || event.target.closest('#button-ajouter')) {
+                openAddModal();
+            }
+
+            // Bouton Retour
+            if (event.target.id === 'button-retour' || event.target.closest('#button-retour')) {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Boutons d'édition sur chaque ligne
+        buttons.edit.forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-id');
+                const rowNumber = document.querySelector(`tr[data-row="${productId}"]`);
+
+                if (!rowNumber) {
+                    console.error("Impossible de trouver la ligne du produit:", productId);
+                    return;
+                }
+
+                // Simulation de récupération des données du produit
+                const productData = {
+                    nom: rowNumber.querySelector('.product-name').textContent,
+                    prix: parseFloat(rowNumber.querySelector('.product-price').textContent),
+                    stock: parseInt(rowNumber.querySelector('.status-badge').textContent),
+                    categorie: rowNumber.querySelector('.product-category').textContent,
+                    description: "Description détaillée du produit " + productId,
+                    imageUrl: rowNumber.querySelector('.product-image img').src
+                };
+
+                document.getElementById('edit-id').value = productId;
+
+                // Afficher l'image dans l'aperçu
+                const imagePreviewEdit = document.getElementById('preview-edit-img');
+                const uploadPlaceholderEdit = document.getElementById('upload-placeholder-edit');
+                const removeImageBtnEdit = document.getElementById('remove-image-edit');
+
+                if (imagePreviewEdit) {
+                    imagePreviewEdit.src = productData.imageUrl;
+                    imagePreviewEdit.style.display = 'block';
+                }
+
+                if (uploadPlaceholderEdit) {
+                    uploadPlaceholderEdit.style.display = 'none';
+                }
+
+                if (removeImageBtnEdit) {
+                    removeImageBtnEdit.style.display = 'block';
+                }
+
+                // Remplir le formulaire d'édition
+                document.getElementById('edit-nom').value = productData.nom;
+                document.getElementById('edit-prix').value = productData.prix;
+                document.getElementById('edit-stock').value = productData.stock;
+                document.getElementById('edit-categorie').value = productData.categorie;
+                document.getElementById('edit-description').value = productData.description;
+
+                // Afficher le modal
+                modals.modifier.style.display = 'block';
+            });
+        });
+
+        // Fonction pour ouvrir le modal de suppression
+        function openDeleteModal(productId) {
+            try {
+                const row = document.querySelector(`[data-row="${productId}"]`);
+                if (row) {
+                    const productName = row.querySelector('.product-name').textContent;
+
+                    // Mettre à jour le texte de confirmation
+                    const deleteProductNameElement = document.getElementById('delete-product-name');
+                    if (deleteProductNameElement) {
+                        deleteProductNameElement.textContent = productName;
+                    }
+
+                    // Stocker l'ID pour l'utiliser lors de la confirmation
+                    const confirmDeleteBtn = document.getElementById('confirm-delete');
+                    if (confirmDeleteBtn) {
+                        confirmDeleteBtn.setAttribute('data-id', productId);
+                    }
+
+                    // Afficher le modal de suppression
+                    const modalSupprimer = document.getElementById('modal-supprimer');
+                    if (modalSupprimer) {
+                        modalSupprimer.style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                console.error("Erreur lors de la récupération du nom du produit:", error);
+                return;
+            }
+        }
+
+        // Utiliser la délégation d'événements pour les boutons de suppression
+        document.addEventListener('click', function(event) {
+            // Vérifier si l'élément cliqué ou un de ses parents est un bouton de suppression
+            const deleteButton = event.target.closest('.delete-btn');
+            if (deleteButton) {
+                const productId = deleteButton.getAttribute('data-id');
+                if (productId) {
+                    openDeleteModal(productId);
+                }
+            }
+        });
+
+        // Fonction pour fermer tous les modals et réinitialiser les états
+        function closeAllModals() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // Fermer les modals avec les boutons de fermeture
+        const closeButtons = document.querySelectorAll('.close-modal, .close-modal-btn');
+        closeButtons.forEach(button => {
+            button.addEventListener('click', closeAllModals);
+        });
+
+        // Fermer en cliquant en dehors du modal
+        window.addEventListener('click', (event) => {
+            document.querySelectorAll('.modal').forEach(modal => {
+                if (event.target === modal) {
+                    closeAllModals();
+                }
+            });
+        });
+
+        // Actions pour les boutons dans les modals
+        // Gestion de l'upload d'image pour l'ajout
+        const imageInputAdd = document.getElementById('image');
+        const imagePreviewAdd = document.getElementById('preview-add-img');
+        const uploadPlaceholderAdd = document.getElementById('upload-placeholder-add');
+        const removeImageBtnAdd = document.getElementById('remove-image-add');
+        const imagePreviewContainerAdd = document.getElementById('image-preview-add');
+
+        // Gestion de l'upload d'image pour l'ajout
+        if (imagePreviewContainerAdd) {
+            imagePreviewContainerAdd.addEventListener('click', function() {
+                if (imageInputAdd) imageInputAdd.click();
+            });
+        }
+
+        if (imageInputAdd) {
+            imageInputAdd.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        if (imagePreviewAdd) {
+                            imagePreviewAdd.src = e.target.result;
+                            imagePreviewAdd.style.display = 'block';
+                        }
+                        if (uploadPlaceholderAdd) uploadPlaceholderAdd.style.display = 'none';
+                        if (removeImageBtnAdd) removeImageBtnAdd.style.display = 'block';
+                    }
+
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        }
+
+        if (removeImageBtnAdd) {
+            removeImageBtnAdd.addEventListener('click', function(e) {
+                e.stopPropagation(); // Évite de déclencher le clic sur le conteneur
+                if (imageInputAdd) imageInputAdd.value = '';
+                if (imagePreviewAdd) {
+                    imagePreviewAdd.src = '';
+                    imagePreviewAdd.style.display = 'none';
+                }
+                if (uploadPlaceholderAdd) uploadPlaceholderAdd.style.display = 'flex';
+                this.style.display = 'none';
+            });
+        }
+
+        // Gestion de l'upload d'image pour la modification
+        const imageInputEdit = document.getElementById('edit-image');
+        const imagePreviewEdit = document.getElementById('preview-edit-img');
+        const uploadPlaceholderEdit = document.getElementById('upload-placeholder-edit');
+        const removeImageBtnEdit = document.getElementById('remove-image-edit');
+        const imagePreviewContainerEdit = document.getElementById('image-preview-edit');
+
+        if (imagePreviewContainerEdit) {
+            imagePreviewContainerEdit.addEventListener('click', function() {
+                if (imageInputEdit) imageInputEdit.click();
+            });
+        }
+
+        if (imageInputEdit) {
+            imageInputEdit.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        if (imagePreviewEdit) {
+                            imagePreviewEdit.src = e.target.result;
+                            imagePreviewEdit.style.display = 'block';
+                        }
+                        if (uploadPlaceholderEdit) uploadPlaceholderEdit.style.display = 'none';
+                        if (removeImageBtnEdit) removeImageBtnEdit.style.display = 'block';
+                    }
+
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        }
+
+        if (removeImageBtnEdit) {
+            removeImageBtnEdit.addEventListener('click', function(e) {
+                e.stopPropagation(); // Évite de déclencher le clic sur le conteneur
+                if (imageInputEdit) imageInputEdit.value = '';
+                if (imagePreviewEdit) {
+                    imagePreviewEdit.src = '';
+                    imagePreviewEdit.style.display = 'none';
+                }
+                if (uploadPlaceholderEdit) uploadPlaceholderEdit.style.display = 'flex';
+                this.style.display = 'none';
+            });
+        }
+
+        // Fonction pour réinitialiser le formulaire d'ajout
+        function resetAddForm() {
+            const form = document.getElementById('add-product-form');
+            if (form) form.reset();
+
+            const imagePreview = document.getElementById('preview-add-img');
+            const uploadPlaceholder = document.getElementById('upload-placeholder-add');
+            const removeImageBtn = document.getElementById('remove-image-add');
+
+            if (imagePreview) imagePreview.style.display = 'none';
+            if (uploadPlaceholder) uploadPlaceholder.style.display = 'flex';
+            if (removeImageBtn) removeImageBtn.style.display = 'none';
+
+            if (imagePreview) imagePreview.src = '';
+        }
+
+        // Fonction pour traiter l'ajout d'un produit
+        function handleAddProduct() {
+            const form = document.getElementById('add-product-form');
+            if (!form) return;
+
+            const formData = new FormData(form);
+
+            // Dans une application réelle, vous enverriez ces données au backend
+            console.log('Formulaire prêt à être envoyé avec image');
+
+            // Pour afficher les paires clé/valeur du FormData (sauf l'image pour la lisibilité)
+            const productData = {};
+            for (let [key, value] of formData.entries()) {
+                if (key !== 'image' || value.name) {
+                    productData[key] = key === 'image' ? value.name : value;
+                }
+            }
+            console.log('Données du nouveau produit:', productData);
+
+            // Réinitialiser le formulaire
+            resetAddForm();
+
+            // Simulation d'ajout réussi
+            alert('Produit ajouté avec succès !');
+
+            // Fermer le modal
+            closeAllModals();
+        }
+
+        // Fonction pour traiter la modification d'un produit
+        function handleUpdateProduct() {
+            const form = document.getElementById('edit-product-form');
+            if (!form) return;
+
+            const formData = new FormData(form);
+
+            // Dans une application réelle, vous enverriez ces données au backend
+            console.log('Formulaire de modification prêt à être envoyé avec image');
+
+            // Pour afficher les paires clé/valeur du FormData (sauf l'image pour la lisibilité)
+            const productData = {};
+            for (let [key, value] of formData.entries()) {
+                if (key !== 'edit-image' || value.name) {
+                    productData[key] = key === 'edit-image' ? value.name : value;
+                }
+            }
+            console.log('Données mises à jour:', productData);
+
+            // Simulation de mise à jour réussie
+            alert('Produit mis à jour avec succès !');
+
+            // Fermer le modal
+            closeAllModals();
+        }
+
+        // Fonction pour traiter la suppression d'un produit
+        function handleDeleteProduct() {
+            const confirmDeleteBtn = document.getElementById('confirm-delete');
+            if (!confirmDeleteBtn) return;
+
+            const productId = confirmDeleteBtn.getAttribute('data-id');
+            console.log('Suppression du produit ID:', productId);
+
+            // Simulation de suppression réussie
+            alert('Produit supprimé avec succès !');
+
+            // Fermer le modal
+            closeAllModals();
+        }
+
+        // Attacher les gestionnaires d'événements
+        document.addEventListener('click', function(event) {
+            // Utilisation de la délégation d'événements pour éviter les problèmes de réattachement
+            if (event.target.id === 'save-product' || event.target.closest('#save-product')) {
+                handleAddProduct();
+            }
+
+            if (event.target.id === 'update-product' || event.target.closest('#update-product')) {
+                handleUpdateProduct();
+            }
+
+            if (event.target.id === 'confirm-delete' || event.target.closest('#confirm-delete')) {
+                handleDeleteProduct();
+            }
+        });
+
+        // Éviter le double gestionnaire d'événements
+        const confirmDeleteBtn = document.getElementById('confirm-delete');
+        if (confirmDeleteBtn) {
+            // Supprimer tout gestionnaire précédent
+            confirmDeleteBtn.removeEventListener('click', handleDeleteProduct);
+        }
+    });
+</script>
 </body>
 </html>
+
