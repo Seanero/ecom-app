@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"/>
+    <title>TechNatura</title>
+    <link rel="stylesheet" href="../assets/css/index.css"/>
+</head>
+<body>
+<h1>Gestion de stock TechNatura</h1>
+    <p>
+        <a href="product.html"><button id="button-produits" class="button">Gerer les produits</button></a>
+        <a href="supplier.html"><button id="button-fournisseurs" class="button">Gerer les fournisseurs</button></a>
+        <a href="sale.html"><button id="button-ventes" class="button">Gerer les ventes</button></a>
+        <a href="rapport.html"><button id="button-rapports" class="button">Gerer les rapports</button></a>
+        <button id="button-fermer" class="button">Quitter l'application</button>
+    </p>
+
+<script>
+    document.getElementById('button-fermer').addEventListener('click', () => {
+        window.electronAPI.closeApp();
+    });
+</script>
+<script src="../index.js"></script>
+<script src="../preload.js"></script>
+</body>
+</html>
