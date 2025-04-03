@@ -6,21 +6,94 @@
     <link rel="stylesheet" href="../assets/css/index.css"/>
 </head>
 <body>
-<h1>Gestion de stock TechNatura</h1>
-    <p>
-        <a href="product.html"><button id="button-produits" class="button">Gerer les produits</button></a>
-        <a href="supplier.html"><button id="button-fournisseurs" class="button">Gerer les fournisseurs</button></a>
-        <a href="sale.html"><button id="button-ventes" class="button">Gerer les ventes</button></a>
-        <a href="rapport.html"><button id="button-rapports" class="button">Gerer les rapports</button></a>
-        <button id="button-fermer" class="button">Quitter l'application</button>
-    </p>
+<header>
+    <h1>Gestion de stock TechNatura</h1>
+</header>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-logo">
+            <img class="logo-icon" src="../assets/img/TechNatura.png" alt="Logo">
+            TechNatura
+        </div>
+        <button class="navbar-toggle" id="navbar-toggle">☰</button>
+        <ul class="navbar-menu" id="navbar-menu">
+            <li>
+                <a href="product.html">
+                    <button id="button-produits" class="button">
+                        <span class="menu-icon">📦</span>
+                        Produits
+                    </button>
+                </a>
+            </li>
+            <li>
+                <a href="categories.html">
+                    <button id="button-catergories" class="button">
+                        <span class="menu-icon">🏭</span>
+                        Catégories
+                    </button>
+                </a>
+            </li>
+            <li>
+                <a href="sale.html">
+                    <button id="button-ventes" class="button">
+                        <span class="menu-icon">💰</span>
+                        Ventes
+                    </button>
+                </a>
+            </li>
+            <li>
+                <a href="rapport.html">
+                    <button id="button-rapports" class="button">
+                        <span class="menu-icon">📊</span>
+                        Rapports
+                    </button>
+                </a>
+            </li>
+            <li>
+                <button id="button-fermer" class="button">
+                    <span class="menu-icon">🚪</span>
+                    Quitter
+                </button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="content">
+    <!-- Contenu principal ici -->
+</div>
 
 <script>
-    document.getElementById('button-fermer').addEventListener('click', () => {
-        window.electronAPI.closeApp();
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle menu fonctionnalité
+        const navbarToggle = document.getElementById('navbar-toggle');
+        const navbarMenu = document.getElementById('navbar-menu');
+
+        navbarToggle.addEventListener('click', function() {
+            navbarMenu.classList.toggle('active');
+        });
+
+        // Détecter la page active pour la mettre en surbrillance
+        const currentPage = window.location.pathname.split("/").pop();
+        const menuButtons = document.querySelectorAll('.navbar-menu button');
+
+        menuButtons.forEach(button => {
+            const parentLink = button.closest('a');
+            if (parentLink && parentLink.getAttribute('href') === currentPage) {
+                button.classList.add('active');
+            }
+        });
+
+        // Gestion du bouton quitter avec l'API Electron
+        const quitButton = document.getElementById('button-fermer');
+        if (quitButton) {
+            quitButton.addEventListener('click', function() {
+                // Utiliser l'API exposée via contextBridge
+                window.electronAPI.closeApp();
+            });
+        }
     });
 </script>
-<script src="../index.js"></script>
-<script src="../preload.js"></script>
 </body>
 </html>

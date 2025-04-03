@@ -1,7 +1,223 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif;
-  margin: auto;
-  max-width: 38rem;
-  padding: 2rem;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Header styling */
+header {
+    text-align: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0;
+    position: relative;
+    z-index: 2;
+}
+
+/* Background effects for header */
+header::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    top: -100px;
+    right: -50px;
+    z-index: 1;
+}
+
+header::after {
+    content: '';
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    bottom: -70px;
+    left: -50px;
+    z-index: 1;
+}
+
+/* Navbar styling */
+.navbar {
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.navbar-logo {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #3a3a3a;
+    display: flex;
+    align-items: center;
+}
+
+.logo-icon {
+    margin-right: 8px;
+    font-size: 1.5rem;
+    max-width: 40%;
+    height: 3rem;
+}
+
+.navbar-menu {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    gap: 8px;
+}
+
+.navbar-menu li {
+    margin: 0;
+}
+
+.navbar-menu a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.navbar-menu button {
+    background-color: #f0f2f5;
+    border: none;
+    color: #4a4a4a;
+    padding: 0.7rem 1.2rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.navbar-menu button:hover {
+    background-color: #e6e9ed;
+    transform: translateY(-2px);
+}
+
+.navbar-menu button:active {
+    transform: translateY(0);
+}
+
+/* Icon styling */
+.menu-icon {
+    font-size: 1.1rem;
+}
+
+/* Special button styling */
+#button-fermer {
+    background-color: #ff4757;
+    color: white;
+}
+
+#button-fermer:hover {
+    background-color: #ea5252;
+}
+
+/* Active menu item */
+.navbar-menu button.active {
+    background-color: #eaefff;
+    color: #000DFF;
+    border-left: 3px solid #000DFF;
+}
+
+/* Navbar toggle button */
+.navbar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #4a4a4a;
+    cursor: pointer;
+}
+
+/* Main content area */
+.content {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .navbar-container {
+        padding: 0.8rem 1.5rem;
+    }
+
+    .navbar-menu button {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .navbar-toggle {
+        display: block;
+    }
+
+    .navbar-menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: white;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        z-index: 100;
+        border-radius: 0 0 12px 12px;
+    }
+
+    .navbar-menu.active {
+        display: flex;
+    }
+
+    .navbar-menu li {
+        width: 100%;
+    }
+
+    .navbar-menu button {
+        width: 100%;
+        text-align: left;
+        padding: 0.8rem 1rem;
+        border-radius: 6px;
+        justify-content: flex-start;
+    }
+
+    header h1 {
+        font-size: 1.8rem;
+    }
 }
