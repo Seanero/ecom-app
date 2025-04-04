@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Bouton Retour
         if (event.target.id === 'button-retour' || event.target.closest('#button-retour')) {
-            window.location.href = 'index.html';
+            window.location.href = 'home.html';
         }
     });
 

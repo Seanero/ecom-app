@@ -12,5 +12,10 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 contextBridge.exposeInMainWorld('electronAPI', {
-    closeApp: () => ipcRenderer.send('close-app')
-})
+    closeApp: () => ipcRenderer.send('close-app'),
+    // Envoyer les identifiants au processus principal
+    login: (email, password) => ipcRenderer.invoke('login', { email, password }),
+
+    // Recevoir le résultat de la connexion
+    onLoginResult: (callback) => ipcRenderer.on('login-result', (event, result) => callback(result))
+});
