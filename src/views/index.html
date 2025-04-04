@@ -338,63 +338,6 @@
   </div>
 </div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const loginModal = document.getElementById('loginModal');
-    const loginForm = document.getElementById('loginForm');
-    const loginError = document.getElementById('loginError');
-    const showLoginBtn = document.getElementById('showLoginBtn');
-
-    // Cachez le modal de connexion initialement
-    loginModal.style.display = 'none';
-
-    // Afficher le modal quand on clique sur le bouton
-    showLoginBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      loginModal.style.display = 'flex';
-    });
-
-    // Cacher le modal quand on clique en dehors du formulaire
-    loginModal.addEventListener('click', function(e) {
-      if (e.target === loginModal) {
-        loginModal.style.display = 'none';
-      }
-    });
-
-    loginForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      window.electronAPI.login(email, password);
-
-      window.electronAPI.onLoginResult((result) => {
-        if (result.success) {
-          loginError.style.display = 'none';
-          window.location.href = './home.html';
-        } else {
-          loginError.style.display = 'block';
-        }
-      });
-    });
-
-    // Fonction pour vérifier si l'utilisateur est déjà connecté
-    function checkLoggedIn() {
-      // Ici, vous implémenteriez votre propre logique pour vérifier
-      // si l'utilisateur est déjà connecté (par exemple, via un token dans localStorage)
-
-      // Exemple simple pour démonstration :
-      const isLoggedIn = localStorage.getItem('isLoggedIn');
-
-      if (isLoggedIn === 'true') {
-        window.location.href = '../assets/views/home.html';
-      }
-    }
-
-    // Vérifier le statut de connexion au chargement de la page
-    checkLoggedIn();
-  });
-</script>
+<script src="../assets/js/index.js"></script>
 </body>
 </html>

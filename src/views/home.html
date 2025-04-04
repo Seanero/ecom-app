@@ -4,6 +4,7 @@
     <meta charset="UTF-8"/>
     <title>TechNatura</title>
     <link rel="stylesheet" href="../assets/css/home.css"/>
+    <link rel="stylesheet" href="../assets/css/user-profile.css"/>
 </head>
 <body>
 <header>
@@ -17,6 +18,37 @@
             TechNatura
         </div>
         <button class="navbar-toggle" id="navbar-toggle">☰</button>
+
+        <!-- Nouveau composant : Profil utilisateur -->
+        <div class="user-profile">
+            <button class="user-profile-button" id="user-profile-button">
+                <div class="user-avatar" id="user-avatar">UN</div>
+                <div class="user-info">
+                    <span class="user-name" id="user-name">Utilisateur</span>
+                    <span class="user-role" id="user-role">Rôle</span>
+                </div>
+                <span class="dropdown-icon">▼</span>
+            </button>
+
+            <div class="user-dropdown" id="user-dropdown">
+                <div class="dropdown-item">
+                    <span class="dropdown-icon-item">👤</span>
+                    <div>
+                        <div id="user-full-name">Nom complet</div>
+                        <div id="user-email" style="font-size: 0.8rem; color: #666;">email@example.com</div>
+                    </div>
+                </div>
+                <div class="dropdown-item">
+                    <span class="dropdown-icon-item">⚙️</span>
+                    <div>Paramètres</div>
+                </div>
+                <div class="dropdown-item logout-item" id="logout-button">
+                    <span class="dropdown-icon-item">🚪</span>
+                    <div>Déconnexion</div>
+                </div>
+            </div>
+        </div>
+
         <ul class="navbar-menu" id="navbar-menu">
             <li>
                 <a href="product.html">

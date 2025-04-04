@@ -1,0 +1,130 @@
+/* Styles pour le profil utilisateur */
+.user-profile {
+    position: relative;
+    margin-left: 20px;
+}
+
+.user-profile-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #f0f2f5;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.user-profile-button:hover {
+    background-color: #e6e9ed;
+}
+
+.user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #6B73FF;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.2;
+}
+
+.user-name {
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.user-role {
+    font-size: 0.75rem;
+    color: #6B73FF;
+}
+
+.dropdown-icon {
+    margin-left: 5px;
+    transition: transform 0.3s ease;
+}
+
+.user-profile-button.active .dropdown-icon {
+    transform: rotate(180deg);
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 200px;
+    z-index: 101;
+    overflow: hidden;
+    display: none;
+    margin-top: 8px;
+}
+
+.user-dropdown.active {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f5f7fa;
+}
+
+.dropdown-icon-item {
+    color: #6B73FF;
+    font-size: 1rem;
+}
+
+.logout-item {
+    border-top: 1px solid #eee;
+    color: #ff4757;
+}
+
+.logout-item .dropdown-icon-item {
+    color: #ff4757;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .navbar-container {
+        position: relative;
+    }
+
+    .user-profile {
+        position: absolute;
+        right: 70px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .user-info {
+        display: none;
+    }
+
+    .user-profile-button {
+        padding: 0.4rem;
+    }
+
+    .dropdown-icon {
+        display: none;
+    }
+}
