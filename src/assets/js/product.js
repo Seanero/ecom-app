@@ -1,15 +1,149 @@
+// src/assets/js/product.js
 document.addEventListener('DOMContentLoaded', function() {
-    // Définir les variables manquantes
+    // Définir les variables pour les modals
     const modals = {
         ajouter: document.getElementById('modal-ajouter'),
         modifier: document.getElementById('modal-modifier'),
         supprimer: document.getElementById('modal-supprimer')
     };
 
-    const buttons = {
-        edit: document.querySelectorAll('.edit-btn'),
-        delete: document.querySelectorAll('.delete-btn')
-    };
+    // Charger les produits depuis l'API
+    loadProducts();
+
+    // Charger les catégories pour les sélecteurs
+    loadCategories();
+
+    // Fonction pour charger les produits depuis l'API
+    async function loadProducts() {
+        try {
+            const result = await window.electronAPI.getAllProducts();
+
+            if (result.success) {
+                displayProducts(result.data);
+            } else {
+                alert('Erreur lors du chargement des produits: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Erreur de chargement des produits:', error);
+            alert('Erreur de chargement des produits');
+        }
+    }
+
+    // Fonction pour charger les catégories
+    async function loadCategories() {
+        try {
+            const result = await window.electronAPI.getAllCategories();
+
+            if (result.success) {
+                populateCategorySelects(result.data);
+            } else {
+                console.error('Erreur lors du chargement des catégories:', result.error);
+            }
+        } catch (error) {
+            console.error('Erreur de chargement des catégories:', error);
+        }
+    }
+
+    // Fonction pour remplir les sélecteurs de catégories
+    function populateCategorySelects(categories) {
+        const selects = [
+            document.getElementById('categorie'),
+            document.getElementById('edit-categorie')
+        ];
+
+        selects.forEach(select => {
+            if (select) {
+                // Garder seulement l'option vide
+                select.innerHTML = '<option value="">Sélectionner une catégorie</option>';
+
+                // Ajouter les catégories
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.nom;
+                    select.appendChild(option);
+                });
+            }
+        });
+    }
+
+    // Fonction pour afficher les produits dans le tableau
+    function displayProducts(products) {
+        const tableBody = document.querySelector('.products-table tbody');
+        if (!tableBody) return;
+
+        // Vider le tableau
+        tableBody.innerHTML = '';
+
+        // Mettre à jour le compteur
+        const productsCount = document.querySelector('.products-count');
+        if (productsCount) {
+            productsCount.textContent = `${products.length} produits`;
+        }
+
+        // Remplir le tableau avec les données
+        products.forEach(product => {
+            const row = document.createElement('tr');
+            row.setAttribute('data-row', product.id);
+
+            // Déterminer le statut de stock
+            let stockStatus = 'status-out-of-stock';
+            if (product.stock > 10) {
+                stockStatus = 'status-in-stock';
+            } else if (product.stock > 0) {
+                stockStatus = 'status-low-stock';
+            }
+
+            row.innerHTML = `
+                <td>${product.id}</td>
+                <td>
+                    <div class="product-image">
+                        <img src="${product.imageUrl || 'https://via.placeholder.com/150x100?text=Produit'}" alt="${product.nom}">
+                    </div>
+                </td>
+                <td class="product-name">${product.nom}</td>
+                <td>
+                    <span class="status-badge ${stockStatus}">${product.stock}</span>
+                </td>
+                <td class="product-price">${product.prix} €</td>
+                <td class="product-category">${product.category?.nom || 'Non catégorisé'}</td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="action-btn edit-btn" data-id="${product.id}">
+                            <span>✏️</span> Modifier
+                        </button>
+                        <button class="action-btn delete-btn" data-id="${product.id}">
+                            <span>🗑️</span> Supprimer
+                        </button>
+                    </div>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+
+        // Réattacher les événements aux nouveaux boutons
+        attachButtonEvents();
+    }
+
+    // Attacher les événements aux boutons
+    function attachButtonEvents() {
+        // Boutons d'édition sur chaque ligne
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', async function() {
+                const productId = this.getAttribute('data-id');
+                await openEditModal(productId);
+            });
+        });
+
+        // Boutons de suppression sur chaque ligne
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-id');
+                openDeleteModal(productId);
+            });
+        });
+    }
 
     // Fonction pour ouvrir le modal d'ajout
     function openAddModal() {
@@ -36,58 +170,53 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Boutons d'édition sur chaque ligne
-    buttons.edit.forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = this.getAttribute('data-id');
-            const rowNumber = document.querySelector(`tr[data-row="${productId}"]`);
+    // Fonction pour ouvrir le modal de modification
+    async function openEditModal(productId) {
+        try {
+            // Récupérer les détails du produit depuis l'API
+            const result = await window.electronAPI.getProductById(productId);
 
-            if (!rowNumber) {
-                console.error("Impossible de trouver la ligne du produit:", productId);
+            if (!result.success) {
+                alert('Erreur lors de la récupération du produit: ' + result.error);
                 return;
             }
 
-            // Simulation de récupération des données du produit
-            const productData = {
-                nom: rowNumber.querySelector('.product-name').textContent,
-                prix: parseFloat(rowNumber.querySelector('.product-price').textContent),
-                stock: parseInt(rowNumber.querySelector('.status-badge').textContent),
-                categorie: rowNumber.querySelector('.product-category').textContent,
-                description: "Description détaillée du produit " + productId,
-                imageUrl: rowNumber.querySelector('.product-image img').src
-            };
+            const product = result.data;
 
-            document.getElementById('edit-id').value = productId;
+            document.getElementById('edit-id').value = product.id;
+            document.getElementById('edit-nom').value = product.nom;
+            document.getElementById('edit-description').value = product.description || '';
+            document.getElementById('edit-prix').value = product.prix;
+            document.getElementById('edit-stock').value = product.stock;
+            document.getElementById('edit-categorie').value = product.categoryId || '';
 
-            // Afficher l'image dans l'aperçu
+            // Afficher l'image si disponible
             const imagePreviewEdit = document.getElementById('preview-edit-img');
             const uploadPlaceholderEdit = document.getElementById('upload-placeholder-edit');
             const removeImageBtnEdit = document.getElementById('remove-image-edit');
 
-            if (imagePreviewEdit) {
-                imagePreviewEdit.src = productData.imageUrl;
+            if (product.imageUrl && imagePreviewEdit) {
+                imagePreviewEdit.src = product.imageUrl;
                 imagePreviewEdit.style.display = 'block';
-            }
 
-            if (uploadPlaceholderEdit) {
-                uploadPlaceholderEdit.style.display = 'none';
-            }
+                if (uploadPlaceholderEdit) {
+                    uploadPlaceholderEdit.style.display = 'none';
+                }
 
-            if (removeImageBtnEdit) {
-                removeImageBtnEdit.style.display = 'block';
+                if (removeImageBtnEdit) {
+                    removeImageBtnEdit.style.display = 'block';
+                }
             }
-
-            // Remplir le formulaire d'édition
-            document.getElementById('edit-nom').value = productData.nom;
-            document.getElementById('edit-prix').value = productData.prix;
-            document.getElementById('edit-stock').value = productData.stock;
-            document.getElementById('edit-categorie').value = productData.categorie;
-            document.getElementById('edit-description').value = productData.description;
 
             // Afficher le modal
-            modals.modifier.style.display = 'block';
-        });
-    });
+            if (modals.modifier) {
+                modals.modifier.style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Erreur lors de la récupération du produit:', error);
+            alert('Erreur lors de la récupération du produit');
+        }
+    }
 
     // Fonction pour ouvrir le modal de suppression
     function openDeleteModal(productId) {
@@ -119,18 +248,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
     }
-
-    // Utiliser la délégation d'événements pour les boutons de suppression
-    document.addEventListener('click', function(event) {
-        // Vérifier si l'élément cliqué ou un de ses parents est un bouton de suppression
-        const deleteButton = event.target.closest('.delete-btn');
-        if (deleteButton) {
-            const productId = deleteButton.getAttribute('data-id');
-            if (productId) {
-                openDeleteModal(productId);
-            }
-        }
-    });
 
     // Fonction pour fermer tous les modals et réinitialiser les états
     function closeAllModals() {
@@ -263,70 +380,139 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Fonction pour traiter l'ajout d'un produit
-    function handleAddProduct() {
+    async function handleAddProduct() {
         const form = document.getElementById('add-product-form');
         if (!form) return;
 
         const formData = new FormData(form);
 
-        // Dans une application réelle, vous enverriez ces données au backend
-        console.log('Formulaire prêt à être envoyé avec image');
-
-        // Pour afficher les paires clé/valeur du FormData (sauf l'image pour la lisibilité)
+        // Convertir les données du formulaire en objet
         const productData = {};
         for (let [key, value] of formData.entries()) {
-            if (key !== 'image' || value.name) {
-                productData[key] = key === 'image' ? value.name : value;
+            if (key !== 'image' || (key === 'image' && value.size > 0)) {
+                if (key === 'prix') {
+                    productData[key] = parseFloat(value);
+                } else if (key === 'stock') {
+                    productData[key] = parseInt(value);
+                } else {
+                    productData[key] = value;
+                }
             }
         }
-        console.log('Données du nouveau produit:', productData);
+
+        // Si une image a été choisie, la convertir en base64 pour l'API
+        if (formData.get('image') && formData.get('image').size > 0) {
+            const imageFile = formData.get('image');
+            try {
+                const base64Image = await fileToBase64(imageFile);
+                productData.imageBase64 = base64Image;
+            } catch (error) {
+                console.error('Erreur lors de la conversion de l\'image:', error);
+            }
+        }
+
+        try {
+            const result = await window.electronAPI.createProduct(productData);
+
+            if (result.success) {
+                alert('Produit ajouté avec succès !');
+                // Recharger les produits
+                loadProducts();
+            } else {
+                alert('Erreur lors de l\'ajout: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Erreur lors de l\'ajout du produit:', error);
+            alert('Erreur lors de l\'ajout du produit');
+        }
 
         // Réinitialiser le formulaire
         resetAddForm();
-
-        // Simulation d'ajout réussi
-        alert('Produit ajouté avec succès !');
 
         // Fermer le modal
         closeAllModals();
     }
 
+    // Fonction pour convertir un fichier en base64
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(file);
+        });
+    }
+
     // Fonction pour traiter la modification d'un produit
-    function handleUpdateProduct() {
+    async function handleUpdateProduct() {
         const form = document.getElementById('edit-product-form');
         if (!form) return;
 
         const formData = new FormData(form);
 
-        // Dans une application réelle, vous enverriez ces données au backend
-        console.log('Formulaire de modification prêt à être envoyé avec image');
+        // Convertir les données du formulaire en objet
+        const productData = {
+            id: formData.get('edit-id'),
+            nom: formData.get('edit-nom'),
+            description: formData.get('edit-description'),
+            prix: parseFloat(formData.get('edit-prix')),
+            stock: parseInt(formData.get('edit-stock')),
+            categoryId: formData.get('edit-categorie')
+        };
 
-        // Pour afficher les paires clé/valeur du FormData (sauf l'image pour la lisibilité)
-        const productData = {};
-        for (let [key, value] of formData.entries()) {
-            if (key !== 'edit-image' || value.name) {
-                productData[key] = key === 'edit-image' ? value.name : value;
+        // Si une nouvelle image a été choisie, la convertir en base64 pour l'API
+        if (formData.get('edit-image') && formData.get('edit-image').size > 0) {
+            const imageFile = formData.get('edit-image');
+            try {
+                const base64Image = await fileToBase64(imageFile);
+                productData.imageBase64 = base64Image;
+            } catch (error) {
+                console.error('Erreur lors de la conversion de l\'image:', error);
             }
         }
-        console.log('Données mises à jour:', productData);
 
-        // Simulation de mise à jour réussie
-        alert('Produit mis à jour avec succès !');
+        try {
+            // Comme votre API ne semble pas avoir d'endpoint spécifique pour mettre à jour,
+            // on utilise le même endpoint que pour la création
+            const result = await window.electronAPI.createProduct(productData);
+
+            if (result.success) {
+                alert('Produit mis à jour avec succès !');
+                // Recharger les produits
+                loadProducts();
+            } else {
+                alert('Erreur lors de la mise à jour: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour du produit:', error);
+            alert('Erreur lors de la mise à jour du produit');
+        }
 
         // Fermer le modal
         closeAllModals();
     }
 
     // Fonction pour traiter la suppression d'un produit
-    function handleDeleteProduct() {
+    async function handleDeleteProduct() {
         const confirmDeleteBtn = document.getElementById('confirm-delete');
         if (!confirmDeleteBtn) return;
 
         const productId = confirmDeleteBtn.getAttribute('data-id');
-        console.log('Suppression du produit ID:', productId);
 
-        // Simulation de suppression réussie
-        alert('Produit supprimé avec succès !');
+        try {
+            const result = await window.electronAPI.deleteProduct(productId);
+
+            if (result.success) {
+                alert('Produit supprimé avec succès !');
+                // Recharger les produits
+                loadProducts();
+            } else {
+                alert('Erreur lors de la suppression: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la suppression du produit:', error);
+            alert('Erreur lors de la suppression du produit');
+        }
 
         // Fermer le modal
         closeAllModals();
@@ -347,11 +533,4 @@ document.addEventListener('DOMContentLoaded', function() {
             handleDeleteProduct();
         }
     });
-
-    // Éviter le double gestionnaire d'événements
-    const confirmDeleteBtn = document.getElementById('confirm-delete');
-    if (confirmDeleteBtn) {
-        // Supprimer tout gestionnaire précédent
-        confirmDeleteBtn.removeEventListener('click', handleDeleteProduct);
-    }
 });

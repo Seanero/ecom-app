@@ -1,113 +1,71 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("DOM chargé");
-
     const loginForm = document.getElementById('loginForm');
     const loginError = document.getElementById('loginError');
-
-    console.log("Formulaire trouvé :", loginForm !== null);
-    console.log("Message d'erreur trouvé :", loginError !== null);
+    const loginModal = document.getElementById('loginModal');
+    const showLoginBtn = document.getElementById('showLoginBtn');
 
     // Vérifier si l'utilisateur est déjà connecté
-    function checkLoggedIn() {
-        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-        const userData = localStorage.getItem('userData');
-
-        console.log("État de connexion :", isLoggedIn);
-        console.log("Données utilisateur présentes :", userData !== null);
-
-        if (isLoggedIn && userData) {
-            console.log("Redirection vers home.html");
-            window.location.href = './home.html';
-            return true;
-        }
-        return false;
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+        window.location.href = './home.html';
     }
 
-    // Vérifier le statut de connexion au chargement de la page
-    const alreadyLoggedIn = checkLoggedIn();
-    console.log("Déjà connecté :", alreadyLoggedIn);
+    // Afficher le modal de connexion
+    if (showLoginBtn && loginModal) {
+        showLoginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            loginModal.style.display = 'flex';
+        });
 
-    // Gérer la soumission du formulaire de connexion
+        window.addEventListener('click', function(e) {
+            if (e.target === loginModal) {
+                loginModal.style.display = 'none';
+            }
+        });
+    }
+
+    // Gestion du formulaire de connexion
     if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
-            console.log("Formulaire soumis");
+        loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            const email = document.getElementById('email');
-            const password = document.getElementById('password');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-            console.log("Champ email trouvé :", email !== null);
-            console.log("Champ password trouvé :", password !== null);
-
-            const emailValue = email ? email.value : "";
-            const passwordValue = password ? password.value : "";
-
-            console.log("Email saisi :", emailValue);
-            console.log("API Electron disponible :", typeof window.electronAPI !== 'undefined');
-
-            // Vérifier que l'API Electron est disponible
-            if (typeof window.electronAPI === 'undefined' || typeof window.electronAPI.login !== 'function') {
-                console.error("API Electron non disponible");
-                if (loginError) {
-                    loginError.textContent = "Erreur technique: API non disponible";
-                    loginError.style.display = 'block';
-                }
+            if (!email || !password) {
+                loginError.textContent = "Veuillez remplir tous les champs";
+                loginError.style.display = 'block';
                 return;
             }
 
             try {
-                // Appel à l'API d'authentification
-                window.electronAPI.login(emailValue, passwordValue);
+                const result = await window.electronAPI.login(email, password);
 
-                window.electronAPI.onLoginResult((result) => {
-                    console.log("Résultat de connexion reçu", result);
+                console.log("TEST", await window.electronAPI.login(email, password))
 
-                    if (result.success) {
-                        console.log("Connexion réussie");
+                if (result.success) {
+                    // Stocker les informations utilisateur
+                    const userData = {
+                        prenom: result.userData.user.firstname || 'Utilisateur',
+                        nom: result.userData.user.lastname || '',
+                        email: result.userData.user.email || email,
+                        role: result.userData.user.role || 'Utilisateur'
+                    };
 
-                        // Stocker les informations de connexion
-                        localStorage.setItem('isLoggedIn', 'true');
+                    // Enregistrer dans le localStorage
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                    localStorage.setItem('isLoggedIn', 'true');
 
-                        // Stocker les données utilisateur
-                        const userData = {
-                            prenom: result.prenom || 'Utilisateur',
-                            nom: result.nom || '',
-                            email: emailValue,
-                            role: result.role || 'Utilisateur'
-                        };
-
-                        localStorage.setItem('userData', JSON.stringify(userData));
-                        console.log("Données utilisateur stockées:", userData);
-
-                        // Stocker le token si disponible
-                        if (result.token) {
-                            localStorage.setItem('userToken', result.token);
-                        }
-
-                        // Masquer le message d'erreur
-                        if (loginError) {
-                            loginError.style.display = 'none';
-                        }
-
-                        // Rediriger vers la page d'accueil
-                        console.log("Redirection vers home.html");
-                        window.location.href = './home.html';
-                    } else {
-                        console.log("Échec de la connexion");
-                        if (loginError) {
-                            loginError.style.display = 'block';
-                        }
-                    }
-                });
-            } catch (err) {
-                console.error("Erreur lors de la tentative de connexion:", err);
-                if (loginError) {
-                    loginError.textContent = "Erreur technique: " + err.message;
+                    // Redirection vers la page d'accueil
+                    window.location.href = './home.html';
+                } else {
+                    // Afficher l'erreur
+                    loginError.textContent = result.error || "Identifiants incorrects";
                     loginError.style.display = 'block';
                 }
+            } catch (error) {
+                loginError.textContent = "Une erreur est survenue";
+                loginError.style.display = 'block';
             }
         });
-    } else {
-        console.error("Formulaire de connexion non trouvé");
     }
 });

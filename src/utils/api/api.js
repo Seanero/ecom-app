@@ -1,3 +1,4 @@
+// src/utils/api/api.js
 const API_CONFIG = {
     BASE_URL: 'http://fr0-games-001.palmasys.fr:25637',
 
@@ -16,7 +17,7 @@ const API_CONFIG = {
         },
         PRODUCT: {
             GET_ALL: '/product/getAll',
-            GET_BY_ID: '/product/get',
+            GET_BY_ID: '/product/get', // On ajoutera l'ID quand nécessaire
             CREATE: '/product/create',
             DELETE: '/product/delete'
         }

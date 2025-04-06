@@ -1,3 +1,4 @@
+// src/assets/js/categories.js
 document.addEventListener('DOMContentLoaded', function() {
     // Définir les variables pour les modals et les boutons
     const modals = {
@@ -6,10 +7,74 @@ document.addEventListener('DOMContentLoaded', function() {
         supprimer: document.getElementById('modal-supprimer')
     };
 
-    const buttons = {
-        edit: document.querySelectorAll('.edit-btn'),
-        delete: document.querySelectorAll('.delete-btn')
-    };
+    // Charger les catégories depuis l'API
+    loadCategories();
+
+    // Fonction pour charger les catégories depuis l'API
+    async function loadCategories() {
+        try {
+            const result = await window.electronAPI.getAllCategories();
+
+            if (result.success) {
+                displayCategories(result.data);
+            } else {
+                alert('Erreur lors du chargement des catégories: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Erreur de chargement des catégories:', error);
+            alert('Erreur de chargement des catégories');
+        }
+    }
+
+    // Fonction pour afficher les catégories dans le tableau
+    function displayCategories(categories) {
+        const tableBody = document.querySelector('.categories-table tbody');
+        if (!tableBody) return;
+
+        // Vider le tableau
+        tableBody.innerHTML = '';
+
+        // Mettre à jour le compteur
+        const categoriesCount = document.querySelector('.categories-count');
+        if (categoriesCount) {
+            categoriesCount.textContent = `${categories.length} catégories`;
+        }
+
+        // Remplir le tableau avec les données
+        categories.forEach(category => {
+            const row = document.createElement('tr');
+            row.setAttribute('data-row', category.id);
+
+            row.innerHTML = `
+                <td>${category.id}</td>
+                <td class="category-name">${category.nom}</td>
+                <td class="category-description">${category.description || ''}</td>
+                <td><span class="badge badge-primary">${category.productCount || 0}</span></td>
+                <td>${formatDate(category.createdAt)}</td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="action-btn edit-btn" data-id="${category.id}">
+                            <span>✏️</span> Modifier
+                        </button>
+                        <button class="action-btn delete-btn" data-id="${category.id}">
+                            <span>🗑️</span> Supprimer
+                        </button>
+                    </div>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+
+        // Réattacher les événements aux nouveaux boutons
+        attachButtonEvents();
+    }
+
+    // Formatter la date
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('fr-FR');
+    }
 
     // Fonction pour ouvrir le modal d'ajout
     function openAddModal() {
@@ -20,6 +85,25 @@ document.addEventListener('DOMContentLoaded', function() {
         if (modals.ajouter) {
             modals.ajouter.style.display = 'block';
         }
+    }
+
+    // Attacher les événements aux boutons
+    function attachButtonEvents() {
+        // Boutons d'édition sur chaque ligne
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const categoryId = this.getAttribute('data-id');
+                openEditModal(categoryId);
+            });
+        });
+
+        // Boutons de suppression sur chaque ligne
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const categoryId = this.getAttribute('data-id');
+                openDeleteModal(categoryId);
+            });
+        });
     }
 
     // Utiliser la délégation d'événements pour les boutons principaux
@@ -35,33 +119,31 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Boutons d'édition sur chaque ligne
-    buttons.edit.forEach(button => {
-        button.addEventListener('click', function() {
-            const categoryId = this.getAttribute('data-id');
-            const rowElement = document.querySelector(`tr[data-row="${categoryId}"]`);
+    // Fonction pour ouvrir le modal de modification
+    function openEditModal(categoryId) {
+        const rowElement = document.querySelector(`tr[data-row="${categoryId}"]`);
 
-            if (!rowElement) {
-                console.error("Impossible de trouver la ligne de la catégorie:", categoryId);
-                return;
-            }
+        if (!rowElement) {
+            console.error("Impossible de trouver la ligne de la catégorie:", categoryId);
+            return;
+        }
 
-            // Récupération des données de la catégorie
-            const categoryData = {
-                nom: rowElement.querySelector('.category-name').textContent,
-                description: rowElement.querySelector('.category-description').textContent
-            };
+        // Récupération des données de la catégorie
+        const categoryData = {
+            id: categoryId,
+            nom: rowElement.querySelector('.category-name').textContent,
+            description: rowElement.querySelector('.category-description').textContent
+        };
 
-            document.getElementById('edit-id').value = categoryId;
+        document.getElementById('edit-id').value = categoryId;
 
-            // Remplir le formulaire d'édition
-            document.getElementById('edit-nom').value = categoryData.nom;
-            document.getElementById('edit-description').value = categoryData.description;
+        // Remplir le formulaire d'édition
+        document.getElementById('edit-nom').value = categoryData.nom;
+        document.getElementById('edit-description').value = categoryData.description;
 
-            // Afficher le modal
-            modals.modifier.style.display = 'block';
-        });
-    });
+        // Afficher le modal
+        modals.modifier.style.display = 'block';
+    }
 
     // Fonction pour ouvrir le modal de suppression
     function openDeleteModal(categoryId) {
@@ -93,18 +175,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Utiliser la délégation d'événements pour les boutons de suppression
-    document.addEventListener('click', function(event) {
-        // Vérifier si l'élément cliqué ou un de ses parents est un bouton de suppression
-        const deleteButton = event.target.closest('.delete-btn');
-        if (deleteButton) {
-            const categoryId = deleteButton.getAttribute('data-id');
-            if (categoryId) {
-                openDeleteModal(categoryId);
-            }
-        }
-    });
-
     // Fonction pour fermer tous les modals et réinitialiser les états
     function closeAllModals() {
         document.querySelectorAll('.modal').forEach(modal => {
@@ -134,66 +204,97 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Fonction pour traiter l'ajout d'une catégorie
-    function handleAddCategory() {
+    async function handleAddCategory() {
         const form = document.getElementById('add-category-form');
         if (!form) return;
 
         const formData = new FormData(form);
 
-        // Dans une application réelle, vous enverriez ces données au backend
-        console.log('Formulaire prêt à être envoyé');
-
-        // Pour afficher les paires clé/valeur du FormData
+        // Convertir FormData en objet simple
         const categoryData = {};
         for (let [key, value] of formData.entries()) {
             categoryData[key] = value;
         }
-        console.log('Données de la nouvelle catégorie:', categoryData);
+
+        try {
+            const result = await window.electronAPI.createCategory(categoryData);
+
+            if (result.success) {
+                alert('Catégorie ajoutée avec succès !');
+                // Recharger les catégories
+                loadCategories();
+            } else {
+                alert('Erreur lors de l\'ajout: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Erreur lors de l\'ajout de la catégorie:', error);
+            alert('Erreur lors de l\'ajout de la catégorie');
+        }
 
         // Réinitialiser le formulaire
         resetAddForm();
-
-        // Simulation d'ajout réussi
-        alert('Catégorie ajoutée avec succès !');
 
         // Fermer le modal
         closeAllModals();
     }
 
     // Fonction pour traiter la modification d'une catégorie
-    function handleUpdateCategory() {
+    async function handleUpdateCategory() {
         const form = document.getElementById('edit-category-form');
         if (!form) return;
 
         const formData = new FormData(form);
 
-        // Dans une application réelle, vous enverriez ces données au backend
-        console.log('Formulaire de modification prêt à être envoyé');
+        // Convertir FormData en objet simple
+        const categoryData = {
+            id: formData.get('edit-id'),
+            nom: formData.get('edit-nom'),
+            description: formData.get('edit-description')
+        };
 
-        // Pour afficher les paires clé/valeur du FormData
-        const categoryData = {};
-        for (let [key, value] of formData.entries()) {
-            categoryData[key] = value;
+        try {
+            // Adapter cette fonction selon votre API
+            // Comme votre API ne semble pas avoir d'endpoint spécifique pour mettre à jour,
+            // vous devrez peut-être utiliser le même endpoint que la création
+            const result = await window.electronAPI.createCategory(categoryData);
+
+            if (result.success) {
+                alert('Catégorie mise à jour avec succès !');
+                // Recharger les catégories
+                loadCategories();
+            } else {
+                alert('Erreur lors de la mise à jour: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour de la catégorie:', error);
+            alert('Erreur lors de la mise à jour de la catégorie');
         }
-        console.log('Données mises à jour:', categoryData);
-
-        // Simulation de mise à jour réussie
-        alert('Catégorie mise à jour avec succès !');
 
         // Fermer le modal
         closeAllModals();
     }
 
     // Fonction pour traiter la suppression d'une catégorie
-    function handleDeleteCategory() {
+    async function handleDeleteCategory() {
         const confirmDeleteBtn = document.getElementById('confirm-delete');
         if (!confirmDeleteBtn) return;
 
         const categoryId = confirmDeleteBtn.getAttribute('data-id');
-        console.log('Suppression de la catégorie ID:', categoryId);
 
-        // Simulation de suppression réussie
-        alert('Catégorie supprimée avec succès !');
+        try {
+            const result = await window.electronAPI.deleteCategory(categoryId);
+
+            if (result.success) {
+                alert('Catégorie supprimée avec succès !');
+                // Recharger les catégories
+                loadCategories();
+            } else {
+                alert('Erreur lors de la suppression: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la suppression de la catégorie:', error);
+            alert('Erreur lors de la suppression de la catégorie');
+        }
 
         // Fermer le modal
         closeAllModals();
