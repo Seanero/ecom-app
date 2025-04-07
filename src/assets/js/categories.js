@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fonction pour charger les catégories depuis l'API
     async function loadCategories() {
         try {
-            const result = await window.electronAPI.getAllCategories();
+            const result = await window.electronAPI.getAllCategory();
 
             if (result.success) {
                 displayCategories(result.data);
@@ -46,17 +46,17 @@ document.addEventListener('DOMContentLoaded', function() {
             row.setAttribute('data-row', category.id);
 
             row.innerHTML = `
-                <td>${category.id}</td>
-                <td class="category-name">${category.nom}</td>
-                <td class="category-description">${category.description || ''}</td>
+                <td>${category._id}</td>
+                <td class="category-name">${category.name}</td>
+                <td class="category-description">${category.slug || ''}</td>
                 <td><span class="badge badge-primary">${category.productCount || 0}</span></td>
                 <td>${formatDate(category.createdAt)}</td>
                 <td>
                     <div class="action-buttons">
-                        <button class="action-btn edit-btn" data-id="${category.id}">
+                        <button class="action-btn edit-btn" data-id="${category._id}">
                             <span>✏️</span> Modifier
                         </button>
-                        <button class="action-btn delete-btn" data-id="${category.id}">
+                        <button class="action-btn delete-btn" data-id="${category._id}">
                             <span>🗑️</span> Supprimer
                         </button>
                     </div>

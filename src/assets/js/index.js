@@ -39,9 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             try {
                 const result = await window.electronAPI.login(email, password);
-
-                console.log("TEST", await window.electronAPI.login(email, password))
-
+                
                 if (result.success) {
                     // Stocker les informations utilisateur
                     const userData = {

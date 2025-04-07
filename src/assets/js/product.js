@@ -1,5 +1,26 @@
 // src/assets/js/product.js
 document.addEventListener('DOMContentLoaded', function() {
+
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            if (!file) {
+                return reject(new Error("Aucun fichier fourni."));
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                resolve(reader.result); // Résultat : data:<mimetype>;base64,<...>
+            };
+
+            reader.onerror = (error) => {
+                reject(new Error(`Erreur de lecture du fichier : ${error.message}`));
+            };
+
+            reader.readAsDataURL(file); // Encodage complet avec MIME
+        });
+    }
+
     // Définir les variables pour les modals
     const modals = {
         ajouter: document.getElementById('modal-ajouter'),
@@ -16,6 +37,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fonction pour charger les produits depuis l'API
     async function loadProducts() {
         try {
+
+            console.log("OUIIII")
+
             const result = await window.electronAPI.getAllProducts();
 
             if (result.success) {
@@ -32,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fonction pour charger les catégories
     async function loadCategories() {
         try {
-            const result = await window.electronAPI.getAllCategories();
+            const result = await window.electronAPI.getAllCategory();
 
             if (result.success) {
                 populateCategorySelects(result.data);
@@ -59,8 +83,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Ajouter les catégories
                 categories.forEach(category => {
                     const option = document.createElement('option');
-                    option.value = category.id;
-                    option.textContent = category.nom;
+                    option.value = category._id;
+                    option.textContent = category.name;
                     select.appendChild(option);
                 });
             }
@@ -84,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Remplir le tableau avec les données
         products.forEach(product => {
             const row = document.createElement('tr');
-            row.setAttribute('data-row', product.id);
+            row.setAttribute('data-row', product._id);
 
             // Déterminer le statut de stock
             let stockStatus = 'status-out-of-stock';
@@ -95,24 +119,24 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             row.innerHTML = `
-                <td>${product.id}</td>
+                <td>${product._id}</td>
                 <td>
                     <div class="product-image">
-                        <img src="${product.imageUrl || 'https://via.placeholder.com/150x100?text=Produit'}" alt="${product.nom}">
+                        <img src="${product.images || 'https://via.placeholder.com/150x100?text=Produit'}" alt="${product.nom}">
                     </div>
                 </td>
-                <td class="product-name">${product.nom}</td>
+                <td class="product-name">${product.name}</td>
                 <td>
                     <span class="status-badge ${stockStatus}">${product.stock}</span>
                 </td>
-                <td class="product-price">${product.prix} €</td>
-                <td class="product-category">${product.category?.nom || 'Non catégorisé'}</td>
+                <td class="product-price">${product.price} €</td>
+                <td class="product-category">${product.category || 'Non catégorisé'}</td>
                 <td>
                     <div class="action-buttons">
-                        <button class="action-btn edit-btn" data-id="${product.id}">
+                        <button class="action-btn edit-btn" data-id="${product._id}">
                             <span>✏️</span> Modifier
                         </button>
-                        <button class="action-btn delete-btn" data-id="${product.id}">
+                        <button class="action-btn delete-btn" data-id="${product._id}">
                             <span>🗑️</span> Supprimer
                         </button>
                     </div>
@@ -184,19 +208,19 @@ document.addEventListener('DOMContentLoaded', function() {
             const product = result.data;
 
             document.getElementById('edit-id').value = product.id;
-            document.getElementById('edit-nom').value = product.nom;
+            document.getElementById('edit-nom').value = product.name;
             document.getElementById('edit-description').value = product.description || '';
-            document.getElementById('edit-prix').value = product.prix;
+            document.getElementById('edit-prix').value = product.price;
             document.getElementById('edit-stock').value = product.stock;
-            document.getElementById('edit-categorie').value = product.categoryId || '';
+            document.getElementById('edit-categorie').value = product.category || '';
 
             // Afficher l'image si disponible
             const imagePreviewEdit = document.getElementById('preview-edit-img');
             const uploadPlaceholderEdit = document.getElementById('upload-placeholder-edit');
             const removeImageBtnEdit = document.getElementById('remove-image-edit');
 
-            if (product.imageUrl && imagePreviewEdit) {
-                imagePreviewEdit.src = product.imageUrl;
+            if (product.images && imagePreviewEdit) {
+                imagePreviewEdit.src = product.images;
                 imagePreviewEdit.style.display = 'block';
 
                 if (uploadPlaceholderEdit) {
@@ -389,8 +413,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Convertir les données du formulaire en objet
         const productData = {};
         for (let [key, value] of formData.entries()) {
-            if (key !== 'image' || (key === 'image' && value.size > 0)) {
-                if (key === 'prix') {
+            if (key !== 'images' || (key === 'images' && value.size > 0)) {
+                if (key === 'price') {
                     productData[key] = parseFloat(value);
                 } else if (key === 'stock') {
                     productData[key] = parseInt(value);
@@ -401,17 +425,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Si une image a été choisie, la convertir en base64 pour l'API
-        if (formData.get('image') && formData.get('image').size > 0) {
-            const imageFile = formData.get('image');
+        if (formData.get('images') && formData.get('images').size > 0) {
+            const imageFile = formData.get('images');
             try {
                 const base64Image = await fileToBase64(imageFile);
-                productData.imageBase64 = base64Image;
+                productData.images = base64Image;
             } catch (error) {
-                console.error('Erreur lors de la conversion de l\'image:', error);
+                console.error('Erreur lors de la conversion de l\'image en base64 :', error);
+                alert('Impossible de convertir l\'image. Veuillez réessayer.');
             }
         }
 
         try {
+            console.log(productData)
             const result = await window.electronAPI.createProduct(productData);
 
             if (result.success) {
@@ -433,16 +459,6 @@ document.addEventListener('DOMContentLoaded', function() {
         closeAllModals();
     }
 
-    // Fonction pour convertir un fichier en base64
-    function fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result.split(',')[1]);
-            reader.onerror = error => reject(error);
-            reader.readAsDataURL(file);
-        });
-    }
-
     // Fonction pour traiter la modification d'un produit
     async function handleUpdateProduct() {
         const form = document.getElementById('edit-product-form');
@@ -453,11 +469,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Convertir les données du formulaire en objet
         const productData = {
             id: formData.get('edit-id'),
-            nom: formData.get('edit-nom'),
+            name: formData.get('edit-nom'),
             description: formData.get('edit-description'),
-            prix: parseFloat(formData.get('edit-prix')),
+            price: parseFloat(formData.get('edit-prix')),
             stock: parseInt(formData.get('edit-stock')),
-            categoryId: formData.get('edit-categorie')
+            category: formData.get('edit-categorie')
         };
 
         // Si une nouvelle image a été choisie, la convertir en base64 pour l'API

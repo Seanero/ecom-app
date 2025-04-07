@@ -49,126 +49,6 @@
         </tr>
         </thead>
         <tbody>
-        <tr data-row="1">
-          <td>1</td>
-          <td>
-            <div class="product-image">
-              <img src="https://via.placeholder.com/150x100?text=Ordinateur" alt="Ordinateur portable HP">
-            </div>
-          </td>
-          <td class="product-name">Ordinateur portable HP</td>
-          <td>
-            <span class="status-badge status-in-stock">25</span>
-          </td>
-          <td class="product-price">899.99 €</td>
-          <td class="product-category">Informatique</td>
-          <td>
-            <div class="action-buttons">
-              <button class="action-btn edit-btn" data-id="1">
-                <span>✏️</span> Modifier
-              </button>
-              <button class="action-btn delete-btn" data-id="1">
-                <span>🗑️</span> Supprimer
-              </button>
-            </div>
-          </td>
-        </tr>
-        <tr data-row="2">
-          <td>2</td>
-          <td>
-            <div class="product-image">
-              <img src="https://via.placeholder.com/150x100?text=Smartphone" alt="Smartphone Samsung Galaxy">
-            </div>
-          </td>
-          <td class="product-name">Smartphone Samsung Galaxy</td>
-          <td>
-            <span class="status-badge status-in-stock">42</span>
-          </td>
-          <td class="product-price">699.99 €</td>
-          <td class="product-category">Téléphonie</td>
-          <td>
-            <div class="action-buttons">
-              <button class="action-btn edit-btn" data-id="2">
-                <span>✏️</span> Modifier
-              </button>
-              <button class="action-btn delete-btn" data-id="2">
-                <span>🗑️</span> Supprimer
-              </button>
-            </div>
-          </td>
-        </tr>
-        <tr data-row="3">
-          <td>3</td>
-          <td>
-            <div class="product-image">
-              <img src="https://via.placeholder.com/150x100?text=Tablette" alt="Tablette Apple iPad">
-            </div>
-          </td>
-          <td class="product-name">Tablette Apple iPad</td>
-          <td>
-            <span class="status-badge status-low-stock">8</span>
-          </td>
-          <td class="product-price">549.99 €</td>
-          <td class="product-category">Informatique</td>
-          <td>
-            <div class="action-buttons">
-              <button class="action-btn edit-btn" data-id="3">
-                <span>✏️</span> Modifier
-              </button>
-              <button class="action-btn delete-btn" data-id="3">
-                <span>🗑️</span> Supprimer
-              </button>
-            </div>
-          </td>
-        </tr>
-        <tr data-row="4">
-          <td>4</td>
-          <td>
-            <div class="product-image">
-              <img src="https://via.placeholder.com/150x100?text=Casque" alt="Casque Audio Sony">
-            </div>
-          </td>
-          <td class="product-name">Casque Audio Sony</td>
-          <td>
-            <span class="status-badge status-in-stock">15</span>
-          </td>
-          <td class="product-price">249.99 €</td>
-          <td class="product-category">Audio</td>
-          <td>
-            <div class="action-buttons">
-              <button class="action-btn edit-btn" data-id="4">
-                <span>✏️</span> Modifier
-              </button>
-              <button class="action-btn delete-btn" data-id="4">
-                <span>🗑️</span> Supprimer
-              </button>
-            </div>
-          </td>
-        </tr>
-        <tr data-row="5">
-          <td>5</td>
-          <td>
-            <div class="product-image">
-              <img src="https://via.placeholder.com/150x100?text=Imprimante" alt="Imprimante Laser">
-            </div>
-          </td>
-          <td class="product-name">Imprimante Laser</td>
-          <td>
-            <span class="status-badge status-out-of-stock">0</span>
-          </td>
-          <td class="product-price">199.99 €</td>
-          <td class="product-category">Périphériques</td>
-          <td>
-            <div class="action-buttons">
-              <button class="action-btn edit-btn" data-id="5">
-                <span>✏️</span> Modifier
-              </button>
-              <button class="action-btn delete-btn" data-id="5">
-                <span>🗑️</span> Supprimer
-              </button>
-            </div>
-          </td>
-        </tr>
         </tbody>
       </table>
     </div>
@@ -187,7 +67,7 @@
       <form id="add-product-form">
         <div class="form-group">
           <label for="nom">Nom du produit</label>
-          <input type="text" id="nom" name="nom" required>
+          <input type="text" id="nom" name="name" required>
         </div>
         <div class="form-group">
           <label for="description">Description</label>
@@ -195,7 +75,7 @@
         </div>
         <div class="form-group">
           <label for="prix">Prix (€)</label>
-          <input type="number" id="prix" name="prix" step="0.01" required>
+          <input type="number" id="prix" name="price" step="0.01" required>
         </div>
         <div class="form-group">
           <label for="stock">Quantité en stock</label>
@@ -203,7 +83,7 @@
         </div>
         <div class="form-group">
           <label for="categorie">Catégorie</label>
-          <select id="categorie" name="categorie" required>
+          <select id="categorie" name="category" required>
             <option value="">Sélectionner une catégorie</option>
             <option value="Informatique">Informatique</option>
             <option value="Téléphonie">Téléphonie</option>
@@ -222,7 +102,7 @@
                 <span>Cliquez ou déposez une image</span>
               </div>
             </div>
-            <input type="file" id="image" name="image" accept="image/*" class="image-input">
+            <input type="file" id="image" name="images" accept="image/*" class="image-input">
             <button type="button" class="btn btn-secondary btn-sm remove-image" id="remove-image-add" style="display: none;">Supprimer l'image</button>
           </div>
         </div>

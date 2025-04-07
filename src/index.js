@@ -98,6 +98,53 @@ app.whenReady().then(() => {
     }
   });
 
+  ipcMain.handle('getAllProducts', async (event, credentials) => {
+    try {
+      const response = await apiClient.get('/product/getAll');
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error('Erreur getAllProduct:', error.message);
+    }
+  })
+
+  ipcMain.handle('getProductById', async (event, id) => {
+    try {
+      const response = await apiClient.get('/product/get/' + id);
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error('Erreur getProductById:', error.message);
+    }
+  })
+
+  ipcMain.handle('createProduct', async (event, productData) => {
+    try {
+      const response = await apiClient.post('/product/create', productData);
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error('Erreur createProduct:', error);
+    }
+  })
+
+  ipcMain.handle('deleteProduct', async (event, id) => {
+    try {
+      const response = await apiClient.post('/product/delete', {
+        id: id
+      });
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error('Erreur deleteProduct:', error);
+    }
+  })
+
+  ipcMain.handle('getAllCategory', async (event, credentials) => {
+    try {
+      const response = await apiClient.get('/category/getAll');
+      return { success: true, data: response.data };
+    } catch (error) {
+      console.error('Erreur getAllCategory:', error.message);
+    }
+  })
+
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
